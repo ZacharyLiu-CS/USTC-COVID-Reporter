@@ -51,3 +51,12 @@ report_payload = {
 ```
 pip install lxml requests 
 ```
+
+## Run
+```
+bash run.sh
+```
+or
+```
+python3 reporter.py
+```
