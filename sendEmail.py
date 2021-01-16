@@ -1,6 +1,4 @@
-#! /home/kvgroup/anaconda3/bin/python3
 # -*- coding: UTF-8 -*-
- 
 import smtplib
 import sys
 from email.mime.text import MIMEText

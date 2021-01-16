@@ -1,4 +1,4 @@
-#! /home/kvgroup/anaconda3/bin/python3
+# -*- coding: UTF-8 -*-
 import sys
 import requests
 from requests.cookies import RequestsCookieJar
