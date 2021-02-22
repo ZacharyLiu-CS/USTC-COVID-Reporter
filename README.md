@@ -9,7 +9,7 @@ Edit your identify information and mail configuration
 ```python
 USERNAME = 'SA19000000' # your unified identity authentication ID
 PASSWORD = '123456' # your unified identity authentication PASSWORD
-MAIL_USER = 'zhangsan@mail.ustc.edu.cn' # the mail you want to use it to send email (recommend your ustc mail)
+MAIL_USER = 'zhangsan@mail.ustc.edu.cn' # the mail you want to use it to send email (only recommend your ustc mail, if not please make sure your mail host is right in sendEmail.py )
 MAIL_PASS = '123456' # the mail pass  you want to use it to send email
 MAIL_TARGET = 'zhansan@foxmail.com' # the mail your want receive email
 ```

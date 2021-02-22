@@ -6,6 +6,7 @@ from lxml import etree
 from sendEmail import SendMessage
 import time
 
+
 USERNAME = 'xxxxxxxxx'
 PASSWORD = 'xxxxxxxxx'
 MAIL_USER = 'xxxxxxxxx'
@@ -13,19 +14,28 @@ MAIL_PASS = 'xxxxxxxxx'
 MAIL_TARGET = 'xxxxxxxxx'
 def main():
     # Check username and password
-    global USERNAME, PASSWORD
-    if not USERNAME:    USERNAME = input('请输入学号：')
-    if not PASSWORD:    PASSWORD = input('请输入密码：')
+    global USERNAME, PASSWORD,MAIL_USER,MAIL_PASS,MAIL_TARGET
+    if len(sys.argv) < 6:
+            exit(-1)
+    elif USERNAME == 'xxxxxxxxx' and PASSWORD == 'xxxxxxxxx' and MAIL_USER == 'xxxxxxxxx' and MAIL_PASS == 'xxxxxxxxx' and MAIL_TARGET == 'xxxxxxxxx' :
+        USERNAME=sys.argv[1]
+        PASSWORD=sys.argv[2]
+        MAIL_USER=sys.argv[3]
+        MAIL_PASS=sys.argv[4]
+        MAIL_TARGET=sys.argv[5]
     # Prepare for the session
     req = requests.Session()
     cookie_jar = RequestsCookieJar()
     login_payload = {
-        'username': USERNAME,
-        'password': PASSWORD,
-        'service': 'https://weixine.ustc.edu.cn/2020/caslogin'
+        "model": "uplogin.jsp",
+        "service": "https://weixine.ustc.edu.cn/2020/caslogin",
+        "warn":"",
+        "showCode":"",
+        "username": USERNAME,
+        "password": PASSWORD,
+        "button":"" 
     }
-    url = 'https://passport.ustc.edu.cn/login?service=https%3A%2F%2Fweixine.ustc.edu.cn%2F2020%2Fcaslogin'
-
+    url = 'https://passport.ustc.edu.cn/login'
     # Login start
     #print('Requesting for cookies from: %s' % url)
     r = req.post(url, data=login_payload, allow_redirects=False)
@@ -36,6 +46,7 @@ def main():
         #print('Redirecting to %s' % new_location)
         cookie_jar.update(r.cookies)
         r = req.get(new_location, allow_redirects=False)
+        
 
     # Finally update my cookies
     cookie_jar.update(r.cookies)
@@ -43,6 +54,7 @@ def main():
 
     # Get my token for later commit
     login_form_data = etree.HTML(r.text)
+    
     token_line = login_form_data.xpath("//*[@id='daliy-report']/form/input/@value")
     assert(len(token_line) == 1)
     token = token_line[0]
@@ -67,33 +79,52 @@ def main():
         'Src - Fetch - User': '71',
         'Upgrade - Insecure - Requests': '1'
     }
+    # report_payload = {
+    #     '_token': token,                # 加入上面获得的token
+    #     'now_address' : '1',            # 当前所在地：内地
+    #     'gps_now_address': '',            #
+    #     'now_province': '340000',        # 当前所在地：安徽
+    #     'gps_province': '',                #
+    #     'now_city': '340100',            # 当前所在地：合肥
+    #     'gps_city': '',                    #
+    #     'now_detail': '',                #
+    #     'is_inschool': '6',                # 是否在校：西校区
+    #     'body_condition':    '1',        # 当前身体状况：正常
+    #     'body_condition_detail': '',    # 
+    #     'now_status': '1',                # 当前状态：正常在校园内
+    #     'now_status_detail': '',        #
+    #     'has_fever': '0',                # 当前有无发热症状：无
+    #     'last_touch_sars': '0',            # 有无接触患者：无
+    #     'last_touch_sars_date': '',        #
+    #     'last_touch_sars_detail': '',    #
+    #     'last_touch_hubei': '0',        # 有无接触湖北人员：无
+    #     'last_touch_hubei_date': '',    #
+    #     'last_touch_hubei_detail': '',    #
+    #     'last_cross_hubei': '0',        # 有无在湖北停留或路过：无
+    #     'last_cross_sars_date': '',        #
+    #     'last_cross_sars_detail': '',    #
+    #     'return_dest': '1',                # 返校目的地：合肥校本部
+    #     'return_dest_detail': '',        #
+    #     'other_detail': '',                # 其他情况说明：（无）
+    # }
     report_payload = {
         '_token': token,                # 加入上面获得的token
         'now_address' : '1',            # 当前所在地：内地
         'gps_now_address': '',            #
-        'now_province': '340000',        # 当前所在地：安徽
+        'now_province': '320000',        # 当前所在地：江苏
         'gps_province': '',                #
-        'now_city': '340100',            # 当前所在地：合肥
+        'now_city': '321200',            # 当前所在地：泰州
         'gps_city': '',                    #
         'now_detail': '',                #
-        'is_inschool': '6',                # 是否在校：西校区
         'body_condition':    '1',        # 当前身体状况：正常
         'body_condition_detail': '',    # 
-        'now_status': '1',                # 当前状态：正常在校园内
+        'now_status': '2',                # 当前状态：正常在校园内
         'now_status_detail': '',        #
         'has_fever': '0',                # 当前有无发热症状：无
         'last_touch_sars': '0',            # 有无接触患者：无
         'last_touch_sars_date': '',        #
         'last_touch_sars_detail': '',    #
-        'last_touch_hubei': '0',        # 有无接触湖北人员：无
-        'last_touch_hubei_date': '',    #
-        'last_touch_hubei_detail': '',    #
-        'last_cross_hubei': '0',        # 有无在湖北停留或路过：无
-        'last_cross_sars_date': '',        #
-        'last_cross_sars_detail': '',    #
-        'return_dest': '1',                # 返校目的地：合肥校本部
-        'return_dest_detail': '',        #
-        'other_detail': '',                # 其他情况说明：（无）
+        'other_detail': ''
     }
 
     # #print(cookie_jar.items())
@@ -118,7 +149,9 @@ def main():
         print(last_report_time)
         print("{} report successfully!".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
     else :
-        email_sender.send("USTC covid-19 report failed!","zhenliu97@foxmail.com")
+        message = "USTC covid-19 report failed!"
+        email_sender.send(message,MAIL_TARGET, MAIL_USER,MAIL_PASS)
+        print("{} report failed!".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
     r.close()
 
 if __name__ == '__main__':
