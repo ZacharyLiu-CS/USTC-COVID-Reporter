@@ -11,6 +11,7 @@ on:
   watch:
     types: started
   repository_dispatch:
+    types: [run]
 
 jobs:
   build:
