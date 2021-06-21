@@ -10,10 +10,10 @@ on:
     branches: [ master ]
   watch:
     types: started
-  schedule:
-    - cron: '5 16 * * *'
+on:
+    workflow_dispatch:
 
-jobs:
+      jobs:
   build:
 
     runs-on: ubuntu-latest
