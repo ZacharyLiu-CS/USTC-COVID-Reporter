@@ -26,7 +26,7 @@ def main():
         MAIL_USER=sys.argv[3]
         MAIL_PASS=sys.argv[4]
         MAIL_TARGET=sys.argv[5]
-        LOCATION=sys.argv[6]
+        LOCATION=int(sys.argv[6])
     # Prepare for the session
     req = requests.Session()
     cookie_jar = RequestsCookieJar()
@@ -83,6 +83,7 @@ def main():
             'Src - Fetch - User': '71',
             'Upgrade - Insecure - Requests': '1'
             }
+    report_payload = {}
     if LOCATION == 1:
         report_payload = {
             '_token': token,                # 加入上面获得的token
