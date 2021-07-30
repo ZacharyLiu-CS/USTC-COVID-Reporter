@@ -112,7 +112,7 @@ def main():
             'return_dest_detail': '',        #
             'other_detail': '',                # 其他情况说明：（无）
         }
-    else if LOCATION == 2:
+    elif LOCATION == 2:
         report_payload = {
             '_token': token,                # 加入上面获得的token
             'now_address' : '1',            # 当前所在地：内地
