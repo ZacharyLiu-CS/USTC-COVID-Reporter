@@ -12,13 +12,14 @@ PASSWORD = '123456' # your unified identity authentication PASSWORD
 MAIL_USER = 'zhangsan@mail.ustc.edu.cn' # the mail you want to use it to send email (only recommend your ustc mail, if not please make sure your mail host is right in sendEmail.py )
 MAIL_PASS = '123456' # the mail pass  you want to use it to send email
 MAIL_TARGET = 'zhansan@foxmail.com' # the mail your want receive email
+LOCATION = 1 # 1 means 安徽 2 means 江苏
 ```
 
 Edit `reporter.py` to configure your report information
 
 ```python
 report_payload = {
-    'now_address' : '1',            # 当前所在地：内地
+  'now_address' : '1',            # 当前所在地：内地
     'gps_now_address': '',            #
     'now_province': '340000',        # 当前所在地：安徽
     'gps_province': '',                #
@@ -49,7 +50,7 @@ report_payload = {
 
 ## Requirements
 ```
-pip install lxml requests 
+pip install lxml requests
 ```
 
 ## Run
@@ -58,5 +59,5 @@ bash run.sh
 ```
 or
 ```
-python3 reporter.py
+python3 reporter.py $USERNAME $PASSWORD $MAIL_USER $MAIL_PASS $MAIL_TARGET $LOCATION
 ```
