@@ -41,13 +41,13 @@ def main():
             }
     url = 'https://passport.ustc.edu.cn/login'
     # Login start
-    #print('Requesting for cookies from: %s' % url)
+    print('Requesting for cookies from: %s' % url, flush=True)
     r = req.post(url, data=login_payload, allow_redirects=False)
 
     # Redirections
     while r.status_code in range(300, 304):
         new_location = r.headers['Location']
-        #print('Redirecting to %s' % new_location)
+        print('Redirecting to %s' % new_location, flush=True)
         cookie_jar.update(r.cookies)
         r = req.get(new_location, allow_redirects=False)
 
@@ -86,61 +86,66 @@ def main():
     report_payload = {}
     if LOCATION == 1:
         report_payload = {
-            '_token': token,                # 加入上面获得的token
-            'now_address': '1',
-            'gps_now_address': '',
-            'now_province': '340000',
-            'gps_province': '',
-            'now_city': '340100',
-            'gps_city': '',
-            'now_country': '340104',
-            'gps_country': '',
-            'now_detail': '',
-            'is_inschool': '6',
-            'body_condition': '1',
-            'body_condition_detail': '',
-            'now_status': '1',
-            'now_status_detail': '',
-            'has_fever': '0',
-            'last_touch_sars': '0',
-            'last_touch_sars_date': '',
-            'last_touch_sars_detail': '',
-            'is_danger': '0',
-            'is_goto_danger': '0',
-            'other_detail': ''
-        }
+                '_token': token,                # 加入上面获得的token
+                'now_address': '1',
+                'gps_now_address': '',
+                'now_province': '340000',
+                'gps_province': '',
+                'now_city': '340100',
+                'gps_city': '',
+                'now_country': '340104',
+                'gps_country': '',
+                'now_detail': '' ,
+                'is_inschool': '6',
+                'body_condition': '1',
+                'body_condition_detail':'' ,
+                'now_status': '1',
+                'now_status_detail': '',
+                'has_fever': '0',
+                'last_touch_sars': '0',
+                'last_touch_sars_date': '',
+                'last_touch_sars_detail': '',
+                'is_danger': '0',
+                'is_goto_danger': '0',
+                'jinji_lxr': '刘贤鹏',
+                'jinji_guanxi': '父亲',
+                'jiji_mobile': '13236194779',
+                'other_detail': ''
+                }
     elif LOCATION == 2:
         report_payload = {
-            '_token': token,                # 加入上面获得的token
+                '_token': token,                # 加入上面获得的token
+                'now_address': '1',
+                'gps_now_address': '',
+                'now_province': '320000',  # 当前所在地: 江苏
+                'gps_province': '',
+                'now_city': '321200',      # 当前所在地: 泰州
+                'gps_city': '',
+                'now_country': '321282',   # 当前所在地: 靖江
+                'gps_country': '',
+                'now_detail': '',
+                'is_inschool': '6',
+                'body_condition': '1',
+                'body_condition_detail': '',
+                'now_status': '2',
+                'now_status_detail': '',
+                'has_fever': '0',
+                'last_touch_sars': '0',
+                'last_touch_sars_date': '',
+                'last_touch_sars_detail': '',
+                'is_danger': '0',
+                'is_goto_danger': '0',
+                'jinji_lxr': '刘贤鹏',
+                'jinji_guanxi': '父亲',
+                'jiji_mobile': '13236194779',
+                'other_detail': ''
+                }
 
-            'now_address': '1',
-            'gps_now_address': '',
-            'now_province': '320000',  # 当前所在地: 江苏
-            'gps_province': '',
-            'now_city': '321200',      # 当前所在地: 泰州
-            'gps_city': '',
-            'now_country': '321282',   # 当前所在地: 靖江
-            'gps_country': '',
-            'now_detail': '',
-            'is_inschool': '6',
-            'body_condition': '1',
-            'body_condition_detail': '',
-            'now_status': '2',
-            'now_status_detail': '',
-            'has_fever': '0',
-            'last_touch_sars': '0',
-            'last_touch_sars_date': '',
-            'last_touch_sars_detail': '',
-            'is_danger': '0',
-            'is_goto_danger': '0',
-            'other_detail': ''
-            }
-
-    # #print(cookie_jar.items())
+    print(cookie_jar.items(),flush=True)
     r = req.post('https://weixine.ustc.edu.cn/2020/daliy_report',
             cookies=cookie_jar, data=report_payload, headers=headers, params=param,
             allow_redirects=False, timeout=50)
-
+    print(report_payload, flush=True)
     # Redirections
     while r.status_code in range(300, 304):
         new_location = r.headers['Location']
@@ -155,8 +160,8 @@ def main():
         message = "USTC covid-19 report successfully!, last time report :{0}".format(last_report_time)
         email_sender = SendMessage()
         email_sender.send(message,MAIL_TARGET, MAIL_USER,MAIL_PASS)
-        print(last_report_time)
-        print("{} report successfully!".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
+        print(last_report_time, flush=True)
+        print("{} report successfully!".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())), flush=True)
         succed_report=True
     r.close()
 
@@ -164,7 +169,7 @@ if __name__ == '__main__':
     for i in range(5):
         main()
         if succed_report == True:
-            print("successfully report at {0}th time".format(i+1))
+            print("successfully report at {0}th time".format(i+1), flush=True)
             break
         else:
             time.sleep(3)
@@ -172,5 +177,5 @@ if __name__ == '__main__':
         message = "USTC covid-19 report failed!"
         email_sender = SendMessage()
         email_sender.send(message,MAIL_TARGET, MAIL_USER,MAIL_PASS)
-        print("{} report failed!".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
+        print("{} report failed!".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())),flush=True)
 
