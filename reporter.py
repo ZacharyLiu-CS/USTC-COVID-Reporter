@@ -6,7 +6,6 @@ from lxml import etree
 from sendEmail import SendMessage
 import time
 
-
 USERNAME = 'xxxxxxxxx'
 PASSWORD = 'xxxxxxxxx'
 MAIL_USER = 'xxxxxxxxx'
@@ -27,30 +26,42 @@ def main():
         MAIL_PASS=sys.argv[4]
         MAIL_TARGET=sys.argv[5]
         LOCATION=int(sys.argv[6])
-    # Prepare for the session
+
+
     req = requests.Session()
     cookie_jar = RequestsCookieJar()
-    login_payload = {
-            "model": "uplogin.jsp",
-            "service": "https://weixine.ustc.edu.cn/2020/caslogin",
-            "warn":"",
-            "showCode":"",
-            "username": USERNAME,
-            "password": PASSWORD,
-            "button":""
-            }
-    url = 'https://passport.ustc.edu.cn/login'
-    # Login start
-    print('Requesting for cookies from: %s' % url, flush=True)
-    r = req.post(url, data=login_payload, allow_redirects=False)
 
+    # Get the CAS_LT
+    cas_url = "https://passport.ustc.edu.cn/login?service=https%3A%2F%2Fweixine.ustc.edu.cn%2F2020%2Fcaslogin"
+    r = req.get(cas_url)
+    cas_html_data = etree.HTML(r.text)
+    cas_lt_line = cas_html_data.xpath("//*[@id='CAS_LT']/@value")
+    assert(len(cas_lt_line) == 1)
+    cas_lt = cas_lt_line[0]
+    print("CAL_LT: %s",cas_lt, flush=True)
+
+ # Prepare for the session
+    login_url = 'https://passport.ustc.edu.cn/login'
+    login_payload = {
+        "model": "uplogin.jsp",
+        "CAS_LT": cas_lt,
+        "service": "https://weixine.ustc.edu.cn/2020/caslogin",
+        "warn":"",
+        "showCode":"",
+        "username": USERNAME,
+        "password": PASSWORD,
+        "button":""
+    }
+    # Login start
+    print('Requesting for cookies from: %s' % login_url, flush=True)
+    r = req.post(login_url, data=login_payload, allow_redirects=False)
+    print("Login status code %s",r.status_code, flush=True)
     # Redirections
     while r.status_code in range(300, 304):
         new_location = r.headers['Location']
         print('Redirecting to %s' % new_location, flush=True)
         cookie_jar.update(r.cookies)
-        r = req.get(new_location, allow_redirects=False)
-
+        r = req.get(new_location,cookies=cookie_jar, allow_redirects=False)
 
     # Finally update my cookies
     cookie_jar.update(r.cookies)
@@ -60,6 +71,7 @@ def main():
     login_form_data = etree.HTML(r.text)
 
     token_line = login_form_data.xpath("//*[@id='daliy-report']/form/input/@value")
+    print( token_line, flush=True)
     assert(len(token_line) == 1)
     token = token_line[0]
 
