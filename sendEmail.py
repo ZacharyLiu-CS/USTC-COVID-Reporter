@@ -20,10 +20,11 @@ class SendMessage:
         subject = 'COVID-19'
         message['Subject'] = Header(subject, 'utf-8')
         try:
-            smtpObj = smtplib.SMTP()
-            smtpObj.connect(mail_host, 25)  # 25 为 SMTP 端口号
+            smtpObj = smtplib.SMTP_SSL(mail_host, 465)  # 465 为 SMTP 端口号 SSL 端口
             smtpObj.login(mail_user, mail_pass)
             smtpObj.sendmail(sender, receivers, message.as_string())
             return True
         except smtplib.SMTPException as e:
+            print(e)
             return False
+
