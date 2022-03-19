@@ -99,16 +99,7 @@ def main():
     if LOCATION == 1:
         report_payload = {
                 '_token': token,                # 加入上面获得的token
-                'now_address': '1',
-                'gps_now_address': '',
-                'now_province': '340000',
-                'gps_province': '',
-                'now_city': '340100',
-                'gps_city': '',
-                'now_country': '340104',
-                'gps_country': '',
-                'now_detail': '' ,
-                'is_inschool': '6',
+                'juzhudi': "先研院",
                 'body_condition': '1',
                 'body_condition_detail':'' ,
                 'now_status': '1',
