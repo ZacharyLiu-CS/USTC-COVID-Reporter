@@ -1,4 +1,4 @@
-# -*- coding: UTF-8 -*-
+ # -*- coding: UTF-8 -*-
 import sys
 import requests
 from requests.cookies import RequestsCookieJar
@@ -59,6 +59,7 @@ def main():
     # Redirections
     while r.status_code in range(300, 304):
         new_location = r.headers['Location']
+        print("New location %s" % new_location)
         print('Redirecting to %s' % new_location, flush=True)
         cookie_jar.update(r.cookies)
         r = req.get(new_location,cookies=cookie_jar, allow_redirects=False)
@@ -118,19 +119,10 @@ def main():
     elif LOCATION == 2:
         report_payload = {
                 '_token': token,                # 加入上面获得的token
-                'now_address': '1',
-                'gps_now_address': '',
-                'now_province': '320000',  # 当前所在地: 江苏
-                'gps_province': '',
-                'now_city': '321200',      # 当前所在地: 泰州
-                'gps_city': '',
-                'now_country': '321282',   # 当前所在地: 靖江
-                'gps_country': '',
-                'now_detail': '',
-                'is_inschool': '6',
+                'juzhudi': "先研院",
                 'body_condition': '1',
-                'body_condition_detail': '',
-                'now_status': '2',
+                'body_condition_detail':'' ,
+                'now_status': '1',
                 'now_status_detail': '',
                 'has_fever': '0',
                 'last_touch_sars': '0',
