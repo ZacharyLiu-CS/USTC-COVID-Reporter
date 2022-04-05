@@ -1,10 +1,11 @@
- # -*- coding: UTF-8 -*-
+# -*- coding: UTF-8 -*-
 import sys
 import requests
 from requests.cookies import RequestsCookieJar
 from lxml import etree
 from sendEmail import SendMessage
 import time
+import json
 
 USERNAME = 'xxxxxxxxx'
 PASSWORD = 'xxxxxxxxx'
@@ -43,15 +44,15 @@ def main():
  # Prepare for the session
     login_url = 'https://passport.ustc.edu.cn/login'
     login_payload = {
-        "model": "uplogin.jsp",
-        "CAS_LT": cas_lt,
-        "service": "https://weixine.ustc.edu.cn/2020/caslogin",
-        "warn":"",
-        "showCode":"",
-        "username": USERNAME,
-        "password": PASSWORD,
-        "button":""
-    }
+            "model": "uplogin.jsp",
+            "CAS_LT": cas_lt,
+            "service": "https://weixine.ustc.edu.cn/2020/caslogin",
+            "warn":"",
+            "showCode":"",
+            "username": USERNAME,
+            "password": PASSWORD,
+            "button":""
+            }
     # Login start
     print('Requesting for cookies from: %s' % login_url, flush=True)
     r = req.post(login_url, data=login_payload, allow_redirects=False)
@@ -97,44 +98,15 @@ def main():
             'Upgrade - Insecure - Requests': '1'
             }
     report_payload = {}
+    with open ('report_data.json',mode='r',encoding='utf-8') as f:
+        report_payload = json.load(f)
+        for i in report_payload:
+            print(i)
+
     if LOCATION == 1:
-        report_payload = {
-                '_token': token,                # 加入上面获得的token
-                'juzhudi': "先研院",
-                'body_condition': '1',
-                'body_condition_detail':'' ,
-                'now_status': '1',
-                'now_status_detail': '',
-                'has_fever': '0',
-                'last_touch_sars': '0',
-                'last_touch_sars_date': '',
-                'last_touch_sars_detail': '',
-                'is_danger': '0',
-                'is_goto_danger': '0',
-                'jinji_lxr': '刘贤鹏',
-                'jinji_guanxi': '父亲',
-                'jiji_mobile': '13236194779',
-                'other_detail': ''
-                }
+        report_payload['_token']=token                # 加入上面获得的token
     elif LOCATION == 2:
-        report_payload = {
-                '_token': token,                # 加入上面获得的token
-                'juzhudi': "先研院",
-                'body_condition': '1',
-                'body_condition_detail':'' ,
-                'now_status': '1',
-                'now_status_detail': '',
-                'has_fever': '0',
-                'last_touch_sars': '0',
-                'last_touch_sars_date': '',
-                'last_touch_sars_detail': '',
-                'is_danger': '0',
-                'is_goto_danger': '0',
-                'jinji_lxr': '刘贤鹏',
-                'jinji_guanxi': '父亲',
-                'jiji_mobile': '13236194779',
-                'other_detail': ''
-                }
+        report_payload['_token']=token                # 加入上面获得的token
 
     print(cookie_jar.items(),flush=True)
     r = req.post('https://weixine.ustc.edu.cn/2020/daliy_report',
