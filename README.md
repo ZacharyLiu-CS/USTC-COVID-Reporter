@@ -49,11 +49,20 @@ pip install lxml requests
 python3 reporter.py $USERNAME $PASSWORD $MAIL_USER $MAIL_PASS $MAIL_TARGET $LOCATION $LOCATION
 ```
 
-##　Use serverless function to trigger github dispatch (perform daily task automatically)
+## Use github action schedule function
 edit it in .github/workflow/python-app.yml
 ```
 schedule:
 	- cron '0 0 * * *'
+```
+also remember to add `action secrets` in project
+```
+LOCATION
+TARGET_MAIL_USER
+USTC_MAIL_PASS
+USTC_MAIL_USER
+USTC_PASS
+USTC_USER
 ```
 
 ## Use serverless function to trigger github dispatch (perform daily task automatically)
