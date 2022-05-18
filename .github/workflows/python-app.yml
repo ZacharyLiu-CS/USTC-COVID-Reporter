@@ -10,8 +10,8 @@ on:
     branches: [ master ]
   watch:
     types: started
-  repository_dispatch:
-    types: [run]
+  schedule:
+    - cron: "0 0 * * *"
 
 jobs:
   build:

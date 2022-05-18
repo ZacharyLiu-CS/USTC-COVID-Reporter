@@ -46,9 +46,29 @@ pip install lxml requests
 
 ## Run
 ```
-bash run.sh
-```
-or
-```
 python3 reporter.py $USERNAME $PASSWORD $MAIL_USER $MAIL_PASS $MAIL_TARGET $LOCATION $LOCATION
+```
+
+##　Use serverless function to trigger github dispatch (perform daily task automatically)
+edit it in .github/workflow/python-app.yml
+```
+schedule:
+	- cron '0 0 * * *'
+```
+
+## Use serverless function to trigger github dispatch (perform daily task automatically)
+Serverless Function
+```
+# -*- coding: utf8 -*-
+import requests
+import json
+
+def trigger_ustc_covid19reporter():
+        payload = json.dumps({"event_type": "run"})
+        print("start to run")
+        header = {"Authorization": "token ${token}",
+                  "Accept": "application/vnd.github.everest-preview+json"}
+        response_decoded_json = requests.post(
+                f'https://api.github.com/repos/ZacharyLiu-CS/USTC-COVID-Reporter/dispatches',
+            data=payload, headers=header)
 ```
